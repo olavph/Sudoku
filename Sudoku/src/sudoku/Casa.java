@@ -25,8 +25,18 @@ public class Casa {
         return preenchido;
     }
 
+    public void setNumero(String n) {
+        try{
+        numero = Integer.decode(n);
+        preenchido = true;
+        }catch(NumberFormatException ex)
+        {
+            numero = -1;
+        }
+    }
+    
     public void setNumero(int n) {
-        numero = n;
+        numero =n;
         preenchido = true;
     }
     
