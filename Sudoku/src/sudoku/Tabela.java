@@ -77,7 +77,7 @@ public class Tabela {
     	int raizDaDimensao = (int) Math.sqrt(dimensao);
     	for (int linha = 0; linha < original.getDimensao(); linha ++) {
 			for (int coluna = 0; coluna < original.getDimensao(); coluna ++) {
-				casas[linha][coluna] = original.getCasa(linha, coluna);
+				casas[linha][coluna] = new Casa(original.getCasa(linha, coluna));
 				int numeroDoQuadrante = coluna / raizDaDimensao + linha / raizDaDimensao * raizDaDimensao; 
 				quadrantes.get(numeroDoQuadrante).add(casas[linha][coluna]);
 			}
@@ -123,5 +123,17 @@ public class Tabela {
     public int getDimensao() {
         return dimensao;
     }
+
+	@Override
+	public String toString() {
+		String string = "";
+		for (int linha = 0; linha < dimensao; linha ++) {
+			for (int coluna = 0; coluna < dimensao; coluna ++) {
+				string += casas[linha][coluna].toString() + " ";
+			}
+			string += "\n";
+		}
+		return string;
+	}
     
 }

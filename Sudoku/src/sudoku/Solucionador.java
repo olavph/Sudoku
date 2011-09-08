@@ -25,7 +25,8 @@ public class Solucionador {
     		Tabela nodo = nodos.remove(0);
     		if (estadoFinal(nodo))
     			return nodo;
-    		metodoDeBusca.adicionar(nodos, metodoDeBusca.expandir(nodo));
+    		if (estadoValido(nodo))
+    			metodoDeBusca.adicionar(nodos, metodoDeBusca.expandir(nodo));
     	}
     	//return null;
     	

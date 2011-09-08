@@ -6,13 +6,13 @@ import sudoku.Casa;
 import sudoku.Tabela;
 
 public class BuscaCegaEmProfundidade implements MetodoDeBusca {
+	
+	Integer linha, coluna;
 
 	@Override
 	public ArrayList<Tabela> expandir(Tabela tabela) {
 		ArrayList<Tabela> proximosNodos = new ArrayList<Tabela>();
-		Integer linha = 0;
-		Integer coluna = 0;
-		Casa casaVazia = primeiraCasaVazia(tabela, linha, coluna);
+		Casa casaVazia = primeiraCasaVazia(tabela);
 		
 		if (casaVazia != null) {
 			// Cria tabelas com todos os valores possíveis para a casa escolhida
@@ -25,7 +25,7 @@ public class BuscaCegaEmProfundidade implements MetodoDeBusca {
 		return proximosNodos;
 	}
 	
-	private Casa primeiraCasaVazia(Tabela tabela, Integer linha, Integer coluna) {
+	private Casa primeiraCasaVazia(Tabela tabela) {
 		for (linha = 0; linha < tabela.getDimensao(); linha ++) {
 			for (coluna = 0; coluna < tabela.getDimensao(); coluna ++) {
 				if (!tabela.getCasa(linha, coluna).estaPreenchida()) {

@@ -314,7 +314,7 @@ public class Form_sudoku extends javax.swing.JFrame {
             int dim = jtab_TabelaJogo.getRowCount();
             String[][] estI = new String[dim][dim];
             for (int i = 0; i < dim; i++) {
-                for (int j = 1; j < dim; j++) {
+                for (int j = 1; j < jtab_TabelaJogo.getRowCount(); j++) {
                     estI[i][j - 1] = (String) jtab_TabelaJogo.getValueAt(i, j);
                 }
             }
