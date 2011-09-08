@@ -1,6 +1,12 @@
 package sudoku;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.swing.JFormattedTextField;
+
+import sudoku.busca.BuscaCegaEmProfundidade;
 
 public class Solucionador {
 
@@ -11,7 +17,19 @@ public class Solucionador {
     public Solucionador() {
     }
 
-    Tabela buscaCegaProf(Tabela jogo, JFormattedTextField jftf) throws InterruptedException {
+    public Tabela buscaCegaProf(Tabela jogo, JFormattedTextField jftf) throws InterruptedException {
+    	ArrayList<Tabela> nodos = new ArrayList<Tabela>();
+    	nodos.add(jogo);
+    	BuscaCegaEmProfundidade metodoDeBusca = new BuscaCegaEmProfundidade();
+    	while (nodos.size() > 0) {
+    		Tabela nodo = nodos.remove(0);
+    		if (estadoFinal(nodo))
+    			return nodo;
+    		metodoDeBusca.adicionar(nodos, metodoDeBusca.expandir(nodo));
+    	}
+    	//return null;
+    	
+    	
         long dif, initial = 0, initialMemo = 0;
         Tabela resp = null;
         initial = System.currentTimeMillis();
@@ -31,12 +49,12 @@ public class Solucionador {
         return resp;
     }
 
-    Tabela buscaSatisfRestricao(Tabela jogo, JFormattedTextField jftf) throws InterruptedException {
+    public Tabela buscaSatisfRestricao(Tabela jogo, JFormattedTextField jftf) throws InterruptedException {
         Tabela resp = null;
         return resp;
     }
 
-    Tabela buscaSatisfRestringida(Tabela jogo, JFormattedTextField jftf) throws InterruptedException {
+    public Tabela buscaSatisfRestringida(Tabela jogo, JFormattedTextField jftf) throws InterruptedException {
         Tabela resp = null;
         return resp;
     }
@@ -53,43 +71,92 @@ public class Solucionador {
         return memoria;
     }
 
-    //testa se o estado respeita as regras do sudoku
-    boolean estadoValido(Tabela t) {
-        int dim = t.getDimensao();
-        Casa[] linha, coluna, quadrante;
-        boolean valido = true;
-        for (int i = 0; i < dim; i++) {
-            linha = t.getLinha(i);//validar toda a linha
-            for (int j = 0; j < linha.length; j++) {
-                for (int k = 0; k < dim; k++) {
-                    if (linha[j].estaPreenchido()) {
-                        if (j != k && linha[j].getNumero() == linha[k].getNumero()) {
-                            valido = false;
-                        }
-                    }
-                }
-            }
-            coluna = t.getColuna(i);//validar toda a coluna
-            for (int j = 0; j < linha.length; j++) {
-                for (int k = 0; k < dim; k++) {
-                    if (coluna[j].estaPreenchido()) {
-                        if (j != k && linha[j].getNumero() == linha[k].getNumero()) {
-                            valido = false;
-                        }
-                    }
-                }
-            }
-            quadrante = t.getQuadrante(i+1);//validar todo o quadrante 
-            for (int j = 0; j < linha.length; j++) {
-                for (int k = 0; k < dim; k++) {
-                    if (quadrante[j].estaPreenchido()) {
-                        if (j != k && linha[j].getNumero() == linha[k].getNumero()) {
-                            valido = false;
-                        }
-                    }
-                }
-            }
+    // Testa se o estado respeita as regras do sudoku
+    public boolean estadoValido(Tabela tabela) {
+        for (int i = 0; i < tabela.getDimensao(); i++) {
+        	// Valida a linha
+        	Casa[] linha = tabela.getLinha(i);
+            HashSet<Integer> numeros = new HashSet<Integer>();
+            for (Casa casa : linha) {
+				if (casa.estaPreenchida()) {
+					if (numeros.contains(casa.getNumero())) {
+						return false;
+					}
+					numeros.add(casa.getNumero());
+				}
+			}
+            
+            // Valida a coluna
+            Casa[] coluna = tabela.getColuna(i);
+            numeros = new HashSet<Integer>();
+            for (Casa casa : coluna) {
+				if (casa.estaPreenchida()) {
+					if (numeros.contains(casa.getNumero())) {
+						return false;
+					}
+					numeros.add(casa.getNumero());
+				}
+			}
+            
+            // Valida o quadrante
+            HashSet<Casa> quadrante = tabela.getQuadrante(i);
+            numeros = new HashSet<Integer>();
+            for (Casa casa : quadrante) {
+				if (casa.estaPreenchida()) {
+					if (numeros.contains(casa.getNumero())) {
+						return false;
+					}
+					numeros.add(casa.getNumero());
+				}
+			}
         }
-        return valido;
+        return true;
     }
+    
+    public boolean estadoFinal(Tabela tabela) {
+    	for (int i = 0; i < tabela.getDimensao(); i++) {
+        	// Valida a linha
+        	Casa[] linha = tabela.getLinha(i);
+            HashSet<Integer> numeros = new HashSet<Integer>();
+            for (Casa casa : linha) {
+				if (casa.estaPreenchida()) {
+					if (numeros.contains(casa.getNumero())) {
+						return false;
+					}
+					numeros.add(casa.getNumero());
+				} else {
+					return false;
+				}
+			}
+            
+            // Valida a coluna
+            Casa[] coluna = tabela.getColuna(i);
+            numeros = new HashSet<Integer>();
+            for (Casa casa : coluna) {
+				if (casa.estaPreenchida()) {
+					if (numeros.contains(casa.getNumero())) {
+						return false;
+					}
+					numeros.add(casa.getNumero());
+				} else {
+					return false;
+				}
+			}
+            
+            // Valida o quadrante
+            HashSet<Casa> quadrante = tabela.getQuadrante(i);
+            numeros = new HashSet<Integer>();
+            for (Casa casa : quadrante) {
+				if (casa.estaPreenchida()) {
+					if (numeros.contains(casa.getNumero())) {
+						return false;
+					}
+					numeros.add(casa.getNumero());
+				} else {
+					return false;
+				}
+			}
+        }
+        return true;
+	}
 }
