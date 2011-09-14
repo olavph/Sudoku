@@ -6,9 +6,9 @@ import java.util.HashSet;
 import sudoku.Casa;
 import sudoku.Tabela;
 
-public class BuscaCegaEmProfundidade implements MetodoDeBusca {
+public class BuscaCegaEmLargura implements MetodoDeBusca {
 
-    Integer linha, coluna;
+	Integer linha, coluna;
 
     @Override
     public ArrayList<Tabela> expandir(Tabela tabela) {
@@ -42,7 +42,7 @@ public class BuscaCegaEmProfundidade implements MetodoDeBusca {
 
     @Override
     public void adicionar(ArrayList<Tabela> nodosAntigos, ArrayList<Tabela> nodosNovos) {
-        nodosAntigos.addAll(0, nodosNovos);
+        nodosAntigos.addAll(nodosAntigos.size(), nodosNovos);
     }
-    
+
 }

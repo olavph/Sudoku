@@ -4,8 +4,6 @@
  */
 package sudoku;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Vector;
 
@@ -14,7 +12,6 @@ public class Tabela {
 	private Casa[][] casas;
 	private Vector<HashSet<Casa>> quadrantes;
 	private int dimensao;
-	private HashMap<Casa, ListaDeRestricoes> restricoes = new HashMap<Casa, ListaDeRestricoes>();
 
 	// faz a alocação de toda a tabela instanciando todas as casas conforme a
 	// dimensao
@@ -119,67 +116,14 @@ public class Tabela {
 		return quadrantes.get(numeroDoQuadrante);
 	}
 	
-	private void createRestricao(Casa c) {
-		if(restricoes.get(c) == null) {
-			System.out.println("Criando lista de restricoes = " + c);
-			restricoes.put(c, new ListaDeRestricoes());
-		}
-	}
-	
-	// Cuida das restricoes da casa 
-	private void addRestricao(Casa estaCasa, int n, int i, int j) {
-		System.out.println("Casa[" + i + "][" + j + "] número atualizado de: " + estaCasa.getNumero() + " para " + n);
-		if (estaCasa.getNumero() != 0) {
-			for (Casa c : getLinha(i)) {
-				if (!c.equals(estaCasa))
-					restricoes.get(c).remove(estaCasa.getNumero());
-			}
-
-			for (Casa c : getLinha(j)) {
-				if (!c.equals(estaCasa))
-					restricoes.get(c).remove(estaCasa.getNumero());
-			}
-			for (Casa c : getQuadrante(getQuadranteNumero(i, j))) {
-				if (!c.equals(estaCasa))
-					restricoes.get(c).remove(estaCasa.getNumero());
-			}
-		} 
-		for (Casa c : getLinha(i)) {
-			if (!c.equals(estaCasa)) {
-				createRestricao(c);
-				restricoes.get(c).add(n);
-				System.out.println("Tamanho das restricoes da casa " + c + " - "  + restricoes.get(c).size());
-			}
-		}
-
-		for (Casa c : getLinha(j)) {
-			if (!c.equals(estaCasa)) {
-				createRestricao(c);
-				restricoes.get(c).add(n);
-				System.out.println("Tamanho das restricoes da casa " + c + " - "  + restricoes.get(c).size());
-			}
-		}
-		for (Casa c : getQuadrante(getQuadranteNumero(i, j))) {
-			if (!c.equals(estaCasa)) { 
-				createRestricao(c);
-				restricoes.get(c).add(n);
-				System.out.println("Tamanho das restricoes da casa " + c + " - "  + restricoes.get(c).size());
-			}
-		}
-	}
-	
 	// seta o valor n de uma casa na posicao (i,j)
 	public void setCasa(String n, int i, int j) {
-		Casa estaCasa = casas[i][j];
-		addRestricao(estaCasa, Integer.parseInt(n), i, j);
-		estaCasa.setNumero(n);
+		casas[i][j].setNumero(n);
 
 	}
 
 	public void setCasa(int n, int i, int j) {
-		Casa estaCasa = casas[i][j];
-		addRestricao(estaCasa, n, i, j);
-		estaCasa.setNumero(n);
+		casas[i][j].setNumero(n);
 	}
 
 	// retorna a casa na posicao (linha, coluna)
@@ -202,6 +146,37 @@ public class Tabela {
 			string += "\n";
 		}
 		return string;
+	}
+
+	public HashSet<Integer> getRestricoes(int linha, int coluna) {
+		HashSet<Integer> restricoes = new HashSet<Integer>();
+		for (int col = 0; col < dimensao; col ++) {
+			restricoes.add(casas[linha][col].getNumero());
+		}
+		for (int lin = 0; lin < dimensao; lin ++) {
+			restricoes.add(casas[lin][coluna].getNumero());
+		}
+		for (Casa c : getQuadrante(getQuadranteNumero(linha, coluna))) {
+			restricoes.add(c.getNumero());
+		}
+		return restricoes;
+	}
+
+	public HashSet<Integer> getValoresPossiveis(int linha, int coluna) {
+		HashSet<Integer> valores = new HashSet<Integer>();
+		for (Integer v = 0; v < dimensao; v++) {
+			valores.add(v);
+		}
+		for (int col = 0; col < dimensao; col ++) {
+			valores.remove(casas[linha][col].getNumero());
+		}
+		for (int lin = 0; lin < dimensao; lin ++) {
+			valores.remove(casas[lin][coluna].getNumero());
+		}
+		for (Casa c : getQuadrante(getQuadranteNumero(linha, coluna))) {
+			valores.remove(c.getNumero());
+		}
+		return valores;
 	}
 
 }

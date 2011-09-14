@@ -7,10 +7,15 @@ package sudoku;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
+import sudoku.busca.BuscaCegaEmLargura;
+import sudoku.busca.BuscaCegaEmProfundidade;
+import sudoku.busca.BuscaComSatisfacaoDeRestricoesMaisRestringida;
+import sudoku.busca.MetodoDeBusca;
+
 public class Interfaceador implements Runnable {
 
     private Tabela jogoSdk;
-    private MetodoSolucao metodoSol;
+    private MetodoDeBusca metodoSol;
     private Solucionador res;
     public Form_sudoku jtxf;
     private Cronometro crono;
@@ -37,11 +42,11 @@ public class Interfaceador implements Runnable {
     //Seta o metodo de solucao do sudoku
     private void setarMetodoSol(String metodo) {
         if (metodo.equalsIgnoreCase("CEGA_PROF")) {
-            metodoSol = MetodoSolucao.BCEGA_PROFUNDIDADE;
+            metodoSol = new BuscaCegaEmProfundidade();
         } else if (metodo.equalsIgnoreCase("SATIS_RESTRICAO")) {
-            metodoSol = MetodoSolucao.BSATISF_RESTRICAO;
+            metodoSol = new BuscaCegaEmLargura();
         } else if (metodo.equalsIgnoreCase("SATIS_RESTRINGIDA")) {
-            metodoSol = MetodoSolucao.BSATISF_RESTRINGIDA;
+            metodoSol = new BuscaComSatisfacaoDeRestricoesMaisRestringida();
         }
     }
 
@@ -50,29 +55,11 @@ public class Interfaceador implements Runnable {
     	crono.comeca();
     	memo.comeca();
         Tabela t = null;
-        if (metodoSol == MetodoSolucao.BCEGA_PROFUNDIDADE) {
-            try {
-                t = res.buscaCegaProf(jogoSdk);
-            } catch (InterruptedException ex) {
-                jtxf.liberar_trancarUi(true);
-                return;
-            }
-        }
-        if (metodoSol == MetodoSolucao.BSATISF_RESTRICAO) {
-            try {
-                t = res.buscaSatisfRestricao(jogoSdk);
-            } catch (InterruptedException ex) {
-                jtxf.liberar_trancarUi(true);
-                return;
-            }
-        }
-        if (metodoSol == MetodoSolucao.BSATISF_RESTRINGIDA) {
-            try {
-                t = res.buscaSatisfRestringida(jogoSdk);
-            } catch (InterruptedException ex) {
-                jtxf.liberar_trancarUi(true);
-                return;
-            }
+        try {
+        	t = res.executarBusca(jogoSdk, metodoSol);
+        } catch (InterruptedException ex) {
+            jtxf.liberar_trancarUi(true);
+            return;
         }
         crono.termina();
         memo.termina();

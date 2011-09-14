@@ -3,7 +3,7 @@ package sudoku;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import sudoku.busca.BuscaCegaEmProfundidade;
+import sudoku.busca.MetodoDeBusca;
 
 public class Solucionador {
 
@@ -14,10 +14,9 @@ public class Solucionador {
     public Solucionador() {
     }
 
-    public Tabela buscaCegaProf(Tabela jogo) throws InterruptedException {
+    public Tabela executarBusca(Tabela jogo, MetodoDeBusca metodoDeBusca) throws InterruptedException {
         ArrayList<Tabela> nodos = new ArrayList<Tabela>();
         nodos.add(jogo);
-        BuscaCegaEmProfundidade metodoDeBusca = new BuscaCegaEmProfundidade();
         while (nodos.size() > 0) {
             Tabela nodo = nodos.remove(0);
             if (estadoFinal(nodo)) {
@@ -29,16 +28,6 @@ public class Solucionador {
             
         }
         return null;
-    }
-
-    public Tabela buscaSatisfRestricao(Tabela jogo) throws InterruptedException {
-        Tabela resp = null;
-        return resp;
-    }
-
-    public Tabela buscaSatisfRestringida(Tabela jogo) throws InterruptedException {
-        Tabela resp = null;
-        return resp;
     }
 
     public long getNos() {
