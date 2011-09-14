@@ -314,8 +314,11 @@ public class Form_sudoku extends javax.swing.JFrame {
             int dim = jtab_TabelaJogo.getRowCount();
             String[][] estI = new String[dim][dim];
             for (int i = 0; i < dim; i++) {
-                for (int j = 1; j < jtab_TabelaJogo.getRowCount(); j++) {
-                    estI[i][j - 1] = (String) jtab_TabelaJogo.getValueAt(i, j);
+                for (int j = 1; j <= dim; j++) {
+                    if(jtab_TabelaJogo.getValueAt(i, j) != null)
+                        estI[i][j - 1] = jtab_TabelaJogo.getValueAt(i, j).toString();
+                    else
+                        estI[i][j - 1] = "";
                 }
             }
             mediador = new Interfaceador(dim, estI, metodo, this);
@@ -440,7 +443,9 @@ public class Form_sudoku extends javax.swing.JFrame {
     }//GEN-LAST:event_jmi_RegrasActionPerformed
 
     private void btn_aleatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_aleatorioActionPerformed
-        
+        Interfaceador inter = new Interfaceador();
+        inter.gerarJogo(jtab_TabelaJogo ,jtab_TabelaJogo.getRowCount());
+        JOptionPane.showMessageDialog(rootPane,"Jogo aleatório gerado");
     }//GEN-LAST:event_btn_aleatorioActionPerformed
 
     public static void main(String args[]) {
