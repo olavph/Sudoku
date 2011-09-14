@@ -14,6 +14,7 @@ public class Interfaceador implements Runnable {
     private Solucionador res;
     public Form_sudoku jtxf;
     private Cronometro crono;
+    private AnalisadorDeMemoria memo;
 
     public Interfaceador(int dim, String[][] estI, String metodo, Form_sudoku txf) {
         jogoSdk = new Tabela(dim, estI);
@@ -21,6 +22,7 @@ public class Interfaceador implements Runnable {
         jtxf = txf;
         res = new Solucionador();
         crono = new Cronometro(jtxf.jftxf_tempo);
+        memo = new AnalisadorDeMemoria();
     }
 
     public Interfaceador() {
@@ -46,6 +48,7 @@ public class Interfaceador implements Runnable {
     //metodo que chama os metodos de resolucao do jogo
     private void resolverJogo() {
     	crono.comeca();
+    	memo.comeca();
         Tabela t = null;
         if (metodoSol == MetodoSolucao.BCEGA_PROFUNDIDADE) {
             try {
@@ -72,7 +75,8 @@ public class Interfaceador implements Runnable {
             }
         }
         crono.termina();
-        long memoria = res.getMemoria();
+        memo.termina();
+        long memoria = memo.getMemoriaMaxima();
         long nos = res.getNos();
         JOptionPane.showMessageDialog(jtxf, "Memoria gasta = " + memoria + "\r\nNúmero de nós = " + nos);
         jtxf.liberar_trancarUi(true);
