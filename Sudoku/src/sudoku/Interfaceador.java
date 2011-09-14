@@ -13,12 +13,14 @@ public class Interfaceador implements Runnable {
     private MetodoSolucao metodoSol;
     private Solucionador res;
     public Form_sudoku jtxf;
+    private Cronometro crono;
 
     public Interfaceador(int dim, String[][] estI, String metodo, Form_sudoku txf) {
         jogoSdk = new Tabela(dim, estI);
         setarMetodoSol(metodo);
         jtxf = txf;
         res = new Solucionador();
+        crono = new Cronometro(jtxf.jftxf_tempo);
     }
 
     public Interfaceador() {
@@ -43,10 +45,11 @@ public class Interfaceador implements Runnable {
 
     //metodo que chama os metodos de resolucao do jogo
     private void resolverJogo() {
+    	crono.comeca();
         Tabela t = null;
         if (metodoSol == MetodoSolucao.BCEGA_PROFUNDIDADE) {
             try {
-                t = res.buscaCegaProf(jogoSdk, jtxf.jftxf_tempo);
+                t = res.buscaCegaProf(jogoSdk);
             } catch (InterruptedException ex) {
                 jtxf.liberar_trancarUi(true);
                 return;
@@ -54,7 +57,7 @@ public class Interfaceador implements Runnable {
         }
         if (metodoSol == MetodoSolucao.BSATISF_RESTRICAO) {
             try {
-                t = res.buscaSatisfRestricao(jogoSdk, jtxf.jftxf_tempo);
+                t = res.buscaSatisfRestricao(jogoSdk);
             } catch (InterruptedException ex) {
                 jtxf.liberar_trancarUi(true);
                 return;
@@ -62,17 +65,16 @@ public class Interfaceador implements Runnable {
         }
         if (metodoSol == MetodoSolucao.BSATISF_RESTRINGIDA) {
             try {
-                t = res.buscaSatisfRestringida(jogoSdk, jtxf.jftxf_tempo);
+                t = res.buscaSatisfRestringida(jogoSdk);
             } catch (InterruptedException ex) {
                 jtxf.liberar_trancarUi(true);
                 return;
             }
         }
+        crono.termina();
         long memoria = res.getMemoria();
         long nos = res.getNos();
-        long tempo = res.getTempo();
         JOptionPane.showMessageDialog(jtxf, "Memoria gasta = " + memoria + "\r\nNúmero de nós = " + nos);
-        jtxf.jftxf_tempo.setText(Long.toBinaryString(tempo));
         jtxf.liberar_trancarUi(true);
         mostrarSolucao(jtxf, t);
     }
@@ -262,7 +264,6 @@ public class Interfaceador implements Runnable {
         }
         jogoSdk = new Tabela(dim, estI);
         boolean done = false;
-        int[] quadPreenchidos = new int[dim];
         int index = 0;
         while (!done) {
             int posI = (int) ((dim-1) * Math.random());

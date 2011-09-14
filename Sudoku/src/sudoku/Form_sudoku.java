@@ -5,7 +5,6 @@
  */
 package sudoku;
 
-import java.lang.management.GarbageCollectorMXBean;
 import javax.swing.JOptionPane;
 
 public class Form_sudoku extends javax.swing.JFrame {

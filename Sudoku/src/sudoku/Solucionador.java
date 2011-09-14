@@ -3,9 +3,6 @@ package sudoku;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-
-import javax.swing.JFormattedTextField;
-
 import sudoku.busca.BuscaCegaEmProfundidade;
 
 public class Solucionador {
@@ -17,15 +14,11 @@ public class Solucionador {
     public Solucionador() {
     }
 
-    public Tabela buscaCegaProf(Tabela jogo, JFormattedTextField jftf) throws InterruptedException {
+    public Tabela buscaCegaProf(Tabela jogo) throws InterruptedException {
         ArrayList<Tabela> nodos = new ArrayList<Tabela>();
         nodos.add(jogo);
-        long dif, initial = System.currentTimeMillis();
         BuscaCegaEmProfundidade metodoDeBusca = new BuscaCegaEmProfundidade();
         while (nodos.size() > 0) {
-            //dif = System.currentTimeMillis() - initial;
-            //jftf.setText(Long.toString(dif));
-            //Thread.sleep(20);//se tirar o sleep o update da interface trava
             Tabela nodo = nodos.remove(0);
             if (estadoFinal(nodo)) {
                 return nodo;
@@ -38,12 +31,12 @@ public class Solucionador {
         return null;
     }
 
-    public Tabela buscaSatisfRestricao(Tabela jogo, JFormattedTextField jftf) throws InterruptedException {
+    public Tabela buscaSatisfRestricao(Tabela jogo) throws InterruptedException {
         Tabela resp = null;
         return resp;
     }
 
-    public Tabela buscaSatisfRestringida(Tabela jogo, JFormattedTextField jftf) throws InterruptedException {
+    public Tabela buscaSatisfRestringida(Tabela jogo) throws InterruptedException {
         Tabela resp = null;
         return resp;
     }
@@ -53,10 +46,6 @@ public class Solucionador {
     }
 
     public long getMemoria() {
-        return memoria;
-    }
-
-    public long getTempo() {
         return memoria;
     }
 
