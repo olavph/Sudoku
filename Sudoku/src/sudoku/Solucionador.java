@@ -22,10 +22,7 @@ public class Solucionador {
             if (estadoFinal(nodo)) {
                 return nodo;
             }
-            if (estadoValido(nodo)) {
-                metodoDeBusca.adicionar(nodos, metodoDeBusca.expandir(nodo));
-            }
-            
+            metodoDeBusca.adicionar(nodos, metodoDeBusca.expandir(nodo));
         }
         return null;
     }

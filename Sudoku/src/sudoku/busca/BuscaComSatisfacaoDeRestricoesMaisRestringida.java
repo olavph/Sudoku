@@ -17,7 +17,7 @@ public class BuscaComSatisfacaoDeRestricoesMaisRestringida implements MetodoDeBu
         Casa casaEscolhida = casaMaisRestringida(tabela);
 
         if (casaEscolhida != null) {
-            // Cria tabelas com todos os valores possíveis para a casa escolhida
+            // Cria tabelas com todos os valores permitidos para a casa escolhida
             for (Integer valor = 1; valor <= tabela.getDimensao(); valor++) {
             	if (!restricoes.contains(valor)) {
                     Tabela novoNodo = new Tabela(tabela);

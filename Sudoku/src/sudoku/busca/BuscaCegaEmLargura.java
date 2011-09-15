@@ -16,7 +16,7 @@ public class BuscaCegaEmLargura implements MetodoDeBusca {
         Casa casaVazia = primeiraCasaVazia(tabela);
 
         if (casaVazia != null) {
-            // Cria tabelas com todos os valores possíveis para a casa escolhida
+            // Cria tabelas com todos os valores permitidos para a casa escolhida
         	HashSet<Integer> restricoes = tabela.getRestricoes(linha, coluna);
             for (int valor = 1; valor <= tabela.getDimensao(); valor++) {
             	if (!restricoes.contains(valor)) {
